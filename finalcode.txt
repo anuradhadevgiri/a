@@ -1,0 +1,311 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using Excel = Microsoft.Office.Interop.Excel; 
+
+
+namespace assign1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            textBox1.Text = "";
+            textBox2.Text = "";
+            textBox3.Text = "";
+            textBox4.Text = "";
+            dateTimePicker1.Text = "";
+            textBox6.Text = "";
+            comboBox1.Text = "";
+            textBox8.Text = "";
+            comboBox2.Text = "";
+
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text == "")
+            {
+                MessageBox.Show("Please enter your Employee ID");
+                textBox1.Focus();
+            } 
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(textBox1.Text, "^[a-zA-Z]+$"))
+            {
+                if (textBox1.Text.Length >= 1)
+                {
+                    textBox1.Text = textBox1.Text.Remove(textBox1.Text.Length - 1);
+                    MessageBox.Show("Enter only Numbers");
+                    return;
+                }
+
+            }
+            else
+            {
+
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int i;
+            
+
+
+
+
+            if (int.TryParse(textBox1.Text.ToString(), out i) && (textBox1.Text.Length == 5))
+            {
+
+                i = Convert.ToInt32(textBox1.Text);
+
+            }
+            else
+            {
+                MessageBox.Show("Please Enter valid Emp Id");
+                return;
+            }
+            double j;
+            if (double.TryParse(textBox6.Text.ToString(), out j) && (textBox6.Text.Length == 10))
+            {
+
+                j = Convert.ToDouble(textBox6.Text);
+                
+            }
+            else
+            {
+                MessageBox.Show("Please Enter valid Contact Number");
+                return;
+            }
+            int k;
+            if (int.TryParse(textBox8.Text.ToString(), out k) && (textBox8.Text.Length == 7))
+            {
+
+                k = Convert.ToInt32(textBox8.Text);
+
+            }
+            else
+            {
+                MessageBox.Show("Please Enter Salary properly");
+                return;
+            }
+            if (textBox1.Text == "" || !(textBox1.Text.Length == 5))
+            {
+                MessageBox.Show("Please Enter Emp Id");
+                return;
+            }
+            else if (textBox2.Text == "")
+            {
+                MessageBox.Show("Please Enter First Name");
+                return;
+            }
+            else if (textBox3.Text == "")
+            {
+                MessageBox.Show("Please Enter Last Name");
+                return;
+            }
+            else if (textBox4.Text == "")
+            {
+                MessageBox.Show("Please Enter Address");
+                return;
+            }
+            else if (dateTimePicker1.Text == "12/31/2016")
+            {
+                MessageBox.Show("Please Enter Date Of Birth");
+                return;
+            }
+
+            else if (textBox6.Text == "")
+            {
+                MessageBox.Show("Please Enter contact number");
+                return;
+            }
+            else if (!(comboBox1.Text == "Consultant" || comboBox1.Text == " Sr. Consultant" || comboBox1.Text == "Lead Consultant" || comboBox1.Text == "Manager" || comboBox1.Text == "Sr. Manager") || comboBox1.Text == "")
+            {
+                MessageBox.Show("Please Enter valid Designation");
+                return;
+            }
+            else if (textBox8.Text == "" && k > 0)
+            {
+                MessageBox.Show("Please Enter Salary");
+                return;
+            }
+            else if (!(comboBox2.Text == "IT" || comboBox2.Text == "Admin" || comboBox2.Text == "Facilities" || comboBox2.Text == "HR") || comboBox2.Text == "")
+            {
+                MessageBox.Show("Please Enter valid Department");
+                return;
+            }
+            
+            Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+
+            if (xlApp == null)
+            {
+                MessageBox.Show("Excel is not properly installed!!");
+                return;
+            }
+
+
+            Excel.Workbook xlWorkBook;
+            Excel.Worksheet xlWorkSheet;
+            object misValue = System.Reflection.Missing.Value;
+
+            xlWorkBook = xlApp.Workbooks.Open("D:\\assign1");
+          /*  xlWorkSheet workSheet = package.Workbook.Worksheets[0];
+            var start = xlWorkSheet.Dimension.Start;
+            var end = xlWorkSheet.Dimension.End;
+            for (int row = start.Row; row <= end.Row; row++)
+            {
+
+                object cellValue = workSheet.Cells[row, A].Text; // This got me the actual value I needed.
+
+            }
+            */
+            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets[1];
+
+            int lastUsedRow = xlWorkSheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing).Row;
+            int a = lastUsedRow + 1;
+
+            xlWorkSheet.Cells[1, 1] = "Employee ID";
+            xlWorkSheet.Cells[1, 2] = "First Name";
+            xlWorkSheet.Cells[1, 3] = "Last Name";
+            xlWorkSheet.Cells[1, 4] = "Address";
+            xlWorkSheet.Cells[1, 5] = "Date of Birth";
+            xlWorkSheet.Cells[1, 6] = "Contact";
+            xlWorkSheet.Cells[1, 7] = "Designation ";
+            xlWorkSheet.Cells[1, 8] = "Salary";
+            xlWorkSheet.Cells[1, 9] = "Department";
+
+            xlWorkSheet.Cells[a, 1] = textBox1.Text;
+            xlWorkSheet.Cells[a, 2] = textBox2.Text;
+            xlWorkSheet.Cells[a, 3] = textBox3.Text;
+            xlWorkSheet.Cells[a, 4] = textBox4.Text;
+            xlWorkSheet.Cells[a, 5] = dateTimePicker1.Text;
+            xlWorkSheet.Cells[a, 6] = textBox6.Text;
+            xlWorkSheet.Cells[a, 7] = comboBox1.Text;
+            xlWorkSheet.Cells[a, 8] = textBox8.Text;
+            xlWorkSheet.Cells[a, 9] = comboBox2.Text;
+
+
+
+            xlWorkBook.Save();
+            xlWorkBook.Close(true, misValue, misValue);
+            xlApp.Quit();
+
+            Marshal.ReleaseComObject(xlWorkSheet);
+            Marshal.ReleaseComObject(xlWorkBook);
+            Marshal.ReleaseComObject(xlApp);
+
+            MessageBox.Show("Excel file created , you can find the file d:\\csharp-Excel1.xls");
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(textBox2.Text, "^[a-zA-Z]+$"))
+            {
+            }
+            else
+            {
+                if (textBox2.Text.Length >= 1)
+                {
+                    textBox2.Text = textBox2.Text.Remove(textBox2.Text.Length - 1);
+                    MessageBox.Show("Enter only Alphabets");
+                    return;
+                }
+
+            }
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(textBox3.Text, "^[a-zA-Z]+$"))
+            {
+            }
+            else
+            {
+                if (textBox3.Text.Length >= 1)
+                {
+                    textBox3.Text = textBox3.Text.Remove(textBox3.Text.Length - 1);
+                    MessageBox.Show("Enter only Alphabets");
+                    return;
+                }
+
+            }
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dateTimePicker1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox6_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox8_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+       
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox2.Text == "IT" || comboBox2.Text == "Admin" || comboBox2.Text == "Facilities" || comboBox2.Text == "HR")
+            {
+
+            }
+            else
+            {
+                comboBox2.Text = "";
+                MessageBox.Show("Enter Valid Department");
+                return;
+            }
+
+        }
+    }
+}
